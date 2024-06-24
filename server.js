@@ -1,6 +1,14 @@
 import "express-async-errors";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
+import cloudinary from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+
 // .env file config
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -19,6 +27,13 @@ if (process.env.NODE_ENV === "development") {
 //middleware
 import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js";
 import { authenticateUser } from "./middleware/authMiddleware.js";
+
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+app.use(express.static(path.resolve(__dirname, "./public"))); //Static files
 
 // Routers
 import jobRouter from "./routes/jobRouter.js";
